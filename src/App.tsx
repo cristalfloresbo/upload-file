@@ -1,69 +1,74 @@
-import { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { useCallback, useState, useActionState, useEffect } from "react";
+import { useDropzone } from "react-dropzone";
 
-import mockUploadImage from './utils/mockUploadImage';
-import './App.css';
+import mockUploadImage from "./utils/mockUploadImage";
+import "./App.css";
+
+const initialsate = {
+    success: false,
+    result: null,
+    error: null,
+};
 
 const App = () => {
-  const [file, setFile] = useState<File>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>('');
+    const [file, setFile] = useState<File>();
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    // Do something with the files
-    if (acceptedFiles.length) {
-      const file = acceptedFiles[0];      
+    const [{ error, success, result }, submitAction, isPending] =
+        useActionState(mockUploadImage, initialsate);
+    console.log("error", error);
+    console.log("success", success);
+    console.log("result", result);
 
-      setFile(file);
-    }
-  }, [])
+    useEffect(() => {
+        if (success && !!file) {
+            setFile(undefined);
+        }
+    }, [success, file]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
-    onDrop,
-    accept: {
-      "image/png": [".png"],
-      "image/jpeg": ["jpeg"],
-    }
-  });
+    const onDrop = useCallback(async (acceptedFiles: File[]) => {
+        // Do something with the files
+        if (acceptedFiles.length) {
+            const file = acceptedFiles[0];
 
-  const handleUploadImage = async () => {
-    if (!file) return;
+            setFile(file);
+        }
+    }, []);
 
-    setLoading(true);
-    setError('');
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept: {
+            "image/png": [".png"],
+            "image/jpeg": ["jpeg"],
+        },
+    });
 
-    try {
-      const response = await mockUploadImage(file);
-      console.log(response);
-    } catch (error) {
-      setError('Error al subir la imagen');
-    } finally {
-      setLoading(false);
-      setFile(undefined);
-    }
-  };
+    const renderDropzoneContent = () => {
+        if (file) {
+            return <p>{file.name}</p>;
+        }
 
-  const renderDropzoneContent = () => {
-    if (file) {
-      return <p>{file.name}</p>;
-    }
+        return (
+            <p className="drop-title">
+                {isDragActive ? "Suelta aqui" : "Arrastra aquí tus archivos"}
+            </p>
+        );
+    };
 
     return (
-      <p className='drop-title'>{isDragActive ? 'Suelta aqui' : 'Arrastra aquí tus archivos'}</p>
+        <form className="container" action={submitAction}>
+            <h2 className="title">Administrador de archivos</h2>
+            <div className="input-area" {...getRootProps()}>
+                <input {...getInputProps()} name="file" />
+                {renderDropzoneContent()}
+                {!success && !!error && <p className="error">{error}</p>}
+            </div>
+            {!!file && (
+                <button className="upload-btn">
+                    {isPending ? "Subiendo..." : "Subir"}
+                </button>
+            )}
+        </form>
     );
-  };
+};
 
-  return (
-    <div className='container'>
-      <h2 className='title'>Administrador de archivos</h2>
-      <div className='input-area' {...getRootProps()}>
-        <input {...getInputProps()} />
-        {renderDropzoneContent()}
-        {!!error && <p className='error'>{error}</p>}
-      </div>
-      {!!file && <button onClick={handleUploadImage} className='upload-btn'>{loading ? 'Subiendo...' : 'Subir'}</button>}
-    </div>
-  )
-}
-
-export default App
+export default App;
