@@ -12,13 +12,13 @@
   "dependencies": {
     "babel-plugin-react-compiler": "^0.0.0-experimental-696af53-20240625",
     "eslint-plugin-react-compiler": "^0.0.0-experimental-0998c1e-20240625",
-    "react": "19.0.0-rc-e684ca66ab-20240619",
-    "react-dom": "19.0.0-rc-e684ca66ab-20240619",
+    "react": "19.0.0-rc-df783f9ea1-20240708",
+    "react-dom": "19.0.0-rc-df783f9ea1-20240708",
     "react-dropzone": "^14.2.3"
   },
   "devDependencies": {
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "npm:types-react@^19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@^19.0.0-rc.1",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
     "@vitejs/plugin-react": "^4.3.1",

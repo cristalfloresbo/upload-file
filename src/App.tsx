@@ -1,10 +1,11 @@
 import { useCallback, useState, useActionState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
-import mockUploadImage from "./utils/mockUploadImage";
+import mockUploadImage, { InitialStateType } from "./utils/mockUploadImage";
+import SubmitButton from "./components/SubmitButton";
 import "./App.css";
 
-const initialsate = {
+const initialsate: InitialStateType = {
     success: false,
     result: null,
     error: null,
@@ -13,11 +14,8 @@ const initialsate = {
 const App = () => {
     const [file, setFile] = useState<File>();
 
-    const [{ error, success, result }, submitAction, isPending] =
+    const [{ error, success }, submitAction] =
         useActionState(mockUploadImage, initialsate);
-    console.log("error", error);
-    console.log("success", success);
-    console.log("result", result);
 
     useEffect(() => {
         if (success && !!file) {
@@ -63,9 +61,10 @@ const App = () => {
                 {!success && !!error && <p className="error">{error}</p>}
             </div>
             {!!file && (
-                <button className="upload-btn">
-                    {isPending ? "Subiendo..." : "Subir"}
-                </button>
+                <SubmitButton />
+                // <button className="upload-btn">
+                //     {isPending ? "Subiendo..." : "Subir"}
+                // </button>
             )}
         </form>
     );
