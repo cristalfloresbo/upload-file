@@ -1,10 +1,11 @@
-import { useCallback, useState, useActionState, useEffect } from "react";
+import { useCallback, useState, useActionState, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 
 import mockUploadImage, { InitialStateType } from "./utils/mockUploadImage";
 import SubmitButton from "./components/SubmitButton";
 import "./App.css";
 import CommentsSection from "./components/CommentsSection";
+import CustomInput from "./components/CustomInput";
 
 const initialsate: InitialStateType = {
     success: false,
@@ -13,6 +14,8 @@ const initialsate: InitialStateType = {
 };
 
 const App = () => {
+    const containerRef = useRef<HTMLDivElement>(null)
+    const inputRef = useRef<HTMLInputElement>(null)
     const [file, setFile] = useState<File>();
 
     const [{ error, success }, submitAction] =
@@ -25,6 +28,10 @@ const App = () => {
     }, [success, file]);
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
+        console.log("inputRef", inputRef.current?.value);
+        console.log("containerRef", containerRef);
+        
+        
         // Do something with the files
         if (acceptedFiles.length) {
             const file = acceptedFiles[0];
@@ -53,26 +60,27 @@ const App = () => {
         );
     };
 
-    return (
-        <CommentsSection />
-    )
-
     // return (
-    //     <form className="container" action={submitAction}>
-    //         <h2 className="title">Administrador de archivos</h2>
-    //         <div className="input-area" {...getRootProps()}>
-    //             <input {...getInputProps()} name="file" />
-    //             {renderDropzoneContent()}
-    //             {!success && !!error && <p className="error">{error}</p>}
-    //         </div>
-    //         {!!file && (
-    //             <SubmitButton />
-    //             // <button className="upload-btn">
-    //             //     {isPending ? "Subiendo..." : "Subir"}
-    //             // </button>
-    //         )}
-    //     </form>
-    // );
+    //     <CommentsSection />
+    // )
+
+    return (
+        <form className="container" action={submitAction}>
+            <h2 className="title">Administrador de archivos</h2>
+            <div className="input-area" {...getRootProps()}>
+                <input {...getInputProps()} name="file" />
+                {renderDropzoneContent()}
+                {!success && !!error && <p className="error">{error}</p>}
+            </div>
+            {!!file && (
+                <SubmitButton />
+                // <button className="upload-btn">
+                //     {isPending ? "Subiendo..." : "Subir"}
+                // </button>
+            )}
+            <CustomInput label="prueba" ref={containerRef} inputRef={inputRef} />
+        </form>
+    );
 };
 
 export default App;
