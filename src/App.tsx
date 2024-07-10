@@ -1,4 +1,4 @@
-import { useCallback, useState, useActionState, useEffect, useRef } from "react";
+import { useCallback, useState, useActionState, useEffect, useRef, use } from "react";
 import { useDropzone } from "react-dropzone";
 
 import mockUploadImage, { InitialStateType } from "./utils/mockUploadImage";
@@ -6,6 +6,7 @@ import SubmitButton from "./components/SubmitButton";
 import "./App.css";
 import CommentsSection from "./components/CommentsSection";
 import CustomInput from "./components/CustomInput";
+import ThemeContext from "./context/ThemeContext";
 
 const initialsate: InitialStateType = {
     success: false,
@@ -14,9 +15,16 @@ const initialsate: InitialStateType = {
 };
 
 const App = () => {
+    const theme = use(ThemeContext);
+    const myPromise = use(Promise.resolve({data: [{id: 1, value: "one"}]}));
     const containerRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
     const [file, setFile] = useState<File>();
+
+    console.log("theme", theme);
+    console.log("myPromise", myPromise);
+    
+    
 
     const [{ error, success }, submitAction] =
         useActionState(mockUploadImage, initialsate);
