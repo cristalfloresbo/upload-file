@@ -4,6 +4,7 @@ import { useDropzone } from "react-dropzone";
 import mockUploadImage, { InitialStateType } from "./utils/mockUploadImage";
 import SubmitButton from "./components/SubmitButton";
 import "./App.css";
+import CommentsSection from "./components/CommentsSection";
 
 const initialsate: InitialStateType = {
     success: false,
@@ -53,21 +54,25 @@ const App = () => {
     };
 
     return (
-        <form className="container" action={submitAction}>
-            <h2 className="title">Administrador de archivos</h2>
-            <div className="input-area" {...getRootProps()}>
-                <input {...getInputProps()} name="file" />
-                {renderDropzoneContent()}
-                {!success && !!error && <p className="error">{error}</p>}
-            </div>
-            {!!file && (
-                <SubmitButton />
-                // <button className="upload-btn">
-                //     {isPending ? "Subiendo..." : "Subir"}
-                // </button>
-            )}
-        </form>
-    );
+        <CommentsSection />
+    )
+
+    // return (
+    //     <form className="container" action={submitAction}>
+    //         <h2 className="title">Administrador de archivos</h2>
+    //         <div className="input-area" {...getRootProps()}>
+    //             <input {...getInputProps()} name="file" />
+    //             {renderDropzoneContent()}
+    //             {!success && !!error && <p className="error">{error}</p>}
+    //         </div>
+    //         {!!file && (
+    //             <SubmitButton />
+    //             // <button className="upload-btn">
+    //             //     {isPending ? "Subiendo..." : "Subir"}
+    //             // </button>
+    //         )}
+    //     </form>
+    // );
 };
 
 export default App;
